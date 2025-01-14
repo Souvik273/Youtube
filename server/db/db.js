@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
-const {dbName} = require('../src/constants.js')
+const {DB_Name} = require('../src/constants.js')
 
 const connectDB = async () => {
     try {
-        const mongoURI = `${process.env.MONGO_URI}/${dbName}`; 
+        const mongoURI = `${process.env.MONGO_URI}/${DB_Name}`; 
         
         console.log('Connecting to:', mongoURI); 
         
