@@ -19,6 +19,8 @@ const uploadOnCloudinary = async (localfilepath) => {
         // file has been uploaded successfully
         console.log(`File is uploaded successfully : ${response.url}`)
 
+        fs.unlinkSync(localfilepath)
+
         return response
     } catch {
         // remove locally saved temopary file as the upload operation got failed
