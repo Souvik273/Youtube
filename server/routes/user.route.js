@@ -1,6 +1,7 @@
 const express = require('express')
-const { registerUser } = require('../controllers/user.controller.js')
+const { registerHandler, loginHandler, logoutHandler } = require('../controllers/user.controller.js')
 const { upload } = require('../middlewares/multer.middleware.js')
+const verifyJWT = require('../middlewares/auth.middleware.js')
 
 const router = express.Router()
 
@@ -15,6 +16,11 @@ router.route('/register').post(
             maxCount: 1
         }
     ])
-    , registerUser)
+    , registerHandler)
+
+router.route("/login").post(loginHandler)
+
+// private route
+router.route("/logout").post(verifyJWT,logoutHandler)
 
 module.exports = router
