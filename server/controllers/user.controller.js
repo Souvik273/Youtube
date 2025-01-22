@@ -137,6 +137,7 @@ const loginHandler = asyncHandler(async(req,res)=>{
 })
 
 const logoutHandler = asyncHandler(async(req,res)=>{
+    // find the user using auth middleware
     await User.findByIdAndUpdate(
         req.user._id,
         {
@@ -144,6 +145,7 @@ const logoutHandler = asyncHandler(async(req,res)=>{
         }
     )
 
+    // clear the cookies from cookie and db 
     const options = {
         httpOnly:true,
         secure:true
