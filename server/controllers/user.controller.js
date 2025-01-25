@@ -32,6 +32,8 @@ const registerHandler = asyncHandler(async (req, res) => {
     // check for user creation 
     // return response 
 
+    // console.log("req.files:", req.files);
+
     const { username, email, fullname, password } = req.body
 
     if (
@@ -48,6 +50,7 @@ const registerHandler = asyncHandler(async (req, res) => {
         throw new ApiError(409, "user with email and username already exists")
     }
 
+
     const avatarLocalPath = req.files?.avatar[0]?.path
 
     // const coverIageLocalPath = req.files?.coverImage[0]?.path
@@ -62,7 +65,10 @@ const registerHandler = asyncHandler(async (req, res) => {
     }
 
     const avatar = await uploadOnCloudinary(avatarLocalPath)
+    console.log("Avatar upload response:", avatar);
+
     const coverImage = await uploadOnCloudinary(coverIageLocalPath)
+    console.log("Cover Image upload response:", coverImage);
 
     if (!avatar) {
         throw new ApiError(404, "Avatar required")
@@ -72,7 +78,7 @@ const registerHandler = asyncHandler(async (req, res) => {
         fullname, avatar: avatar.url,
         coverImage: coverImage?.url || "",
         email, password,
-        username: username.toLower()
+        username: username.toLowerCase()
     })
 
     const createdUser = await User.findById(newUser._id).select(
