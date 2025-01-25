@@ -14,14 +14,14 @@ const uploadOnCloudinary = async (localfilepath) => {
             return null;
         }
 
-        console.log("Uploading to Cloudinary:", localfilepath);
+        // console.log("Uploading to Cloudinary:", localfilepath);
 
         // Upload the file to Cloudinary
         const response = await cloudinary.uploader.upload(localfilepath, {
             resource_type: "auto",
         });
 
-        console.log("Cloudinary Upload Response:", response);
+        // console.log("Cloudinary Upload Response:", response);
 
         // Remove the temporary file
         fs.unlinkSync(localfilepath);
