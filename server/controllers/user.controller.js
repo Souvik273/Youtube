@@ -12,6 +12,10 @@ const generateAccessTokenAndRefreshToken = async(userId)=>{
         const accessToken =  user.generateAccessToken()
         const refreshToken =  user.generateRefreshToken()
 
+        if (!accessToken || !refreshToken) {
+            throw new Error("Token generation failed");
+        }
+
         user.refreshToken=refreshToken
         await user.save({validateBeforeSave:false})
 
@@ -112,7 +116,7 @@ const loginHandler = asyncHandler(async(req,res)=>{
     }
 
     // check the passsword is valid or not 
-    const isPasswordCorrect = user.isPassword(password)
+    const isPasswordCorrect = await user.isPassword(password)
 
     if(!isPasswordCorrect){
         throw new ApiError(401,"Invalid credentials")
@@ -121,7 +125,7 @@ const loginHandler = asyncHandler(async(req,res)=>{
     // generate the tokens 
     const {accessToken,refreshToken} = await generateAccessTokenAndRefreshToken(user._id)
     
-    const loggedInUser = await User.findById(user._id).select("-password refreshToken")
+    const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
     
     // send to cookies
     const options = {
