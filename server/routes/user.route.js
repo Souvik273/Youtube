@@ -1,5 +1,5 @@
 const express = require('express')
-const { registerHandler, loginHandler, logoutHandler, refreshAccessToken } = require('../controllers/user.controller.js')
+const { registerHandler, loginHandler, logoutHandler, refreshAccessToken,changeCurrentPassword } = require('../controllers/user.controller.js')
 const { upload } = require('../middlewares/multer.middleware.js')
 const verifyJWT = require('../middlewares/auth.middleware.js')
 
@@ -23,5 +23,6 @@ router.route("/login").post(loginHandler)
 // private route
 router.route("/logout").post(verifyJWT,logoutHandler)
 router.route("/refresh-token").post(refreshAccessToken)
+router.route("/change-password").post(verifyJWT,changeCurrentPassword)
 
 module.exports = router
