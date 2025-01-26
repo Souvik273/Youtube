@@ -1,5 +1,5 @@
 const express = require('express')
-const { registerHandler, loginHandler, logoutHandler, refreshAccessToken,changeCurrentPassword,getCurrentUser,updateAccountDetails,changeAvatar,changeCoverImage } = require('../controllers/user.controller.js')
+const { registerHandler, loginHandler, logoutHandler, refreshAccessToken,changeCurrentPassword,getCurrentUser,updateAccountDetails,changeAvatar,changeCoverImage,getUserChannelProfile,getWatchHistory } = require('../controllers/user.controller.js')
 const { upload } = require('../middlewares/multer.middleware.js')
 const verifyJWT = require('../middlewares/auth.middleware.js')
 
@@ -28,5 +28,8 @@ router.route("/get-user").get(verifyJWT,getCurrentUser)
 router.route("/update-details").post(verifyJWT,updateAccountDetails)
 router.route("/change-avatar").post(verifyJWT,upload.single("avatar"),changeAvatar)
 router.route("/change-cover-image").post(verifyJWT,upload.single("coverImage"),changeCoverImage)
+
+router.route("/c/:username").get(verifyJWT, getUserChannelProfile)
+router.route("/history").get(verifyJWT, getWatchHistory)
 
 module.exports = router
