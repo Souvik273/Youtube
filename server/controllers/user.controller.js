@@ -239,6 +239,29 @@ const changeCurrentPassword = asyncHandler(async(req,res)=>{
     ))
 })
 
+const getCurrentUser = asyncHandler(async(req,res)=>{
+    return res.status(200).
+    json(new ApiResponse(200,
+        req.user,
+        "User received successfully !!!"
+    ))
+})
+
+const updateAccountDetails = asyncHandler(async(req,res)=>{
+    const { fullname,email } = req.body
+    if(!(fullname || email)){
+        throw new ApiError(409,"all fields are required")
+    }
 
 
-module.exports = { registerHandler,loginHandler,logoutHandler,refreshAccessToken,changeCurrentPassword }
+})
+
+module.exports = { 
+    registerHandler,
+    loginHandler,
+    logoutHandler,
+    refreshAccessToken,
+    changeCurrentPassword,
+    getCurrentUser,
+    updateAccountDetails 
+}
