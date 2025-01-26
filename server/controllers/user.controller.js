@@ -267,6 +267,66 @@ const updateAccountDetails = asyncHandler(async(req,res)=>{
     )
 })
 
+const changeAvatar = asyncHandler(async(req,res)=>{
+    const avatarLocalPath = req.file.path
+
+    if(!avatarLocalPath){
+        throw new ApiError(404,"avatar local path missing")
+    }
+
+    try {
+        const cloudPath = await uploadOnCloudinary(avatarLocalPath)
+    
+        if(!cloudPath.url){
+            throw new ApiError(400,"cloud upload failed")
+        }
+    
+        const user = await User.findByIdAndUpdate(req.user._id,
+            {
+                $set:{avatar:cloudPath.url}
+            },
+            {
+                new:true
+            }
+        ).select("-password -_id -refreshToken")
+    
+        return res.status(200).
+        json(new ApiResponse(200,user,"avatar updated successsfully"))
+    } catch (error) {
+        throw new ApiError(409,"cloudinary upload failed for avatar update")
+    }
+})
+
+const changeCoverImage = asyncHandler(async(req,res)=>{
+    const coverImageLocalPath = req.file.path
+
+    if(!coverImageLocalPath){
+        throw new ApiError(404,"coverImage local path missing")
+    }
+
+    try {
+        const cloudPath = await uploadOnCloudinary(coverImageLocalPath)
+    
+        if(!cloudPath.url){
+            throw new ApiError(400,"cloud upload failed")
+        }
+    
+        const user = await User.findByIdAndUpdate(req.user._id,
+            {
+                $set:{avatar:cloudPath.url}
+            },
+            {
+                new:true
+            }
+        ).select("-password -_id -refreshToken")
+    
+        return res.status(200).
+        json(new ApiResponse(200,user,"coverImage updated successsfully"))
+    } catch (error) {
+        throw new ApiError(409,"cloudinary upload failed for coverImage update")
+    }
+})
+
 module.exports = { 
     registerHandler,
     loginHandler,
@@ -274,5 +334,7 @@ module.exports = {
     refreshAccessToken,
     changeCurrentPassword,
     getCurrentUser,
-    updateAccountDetails 
+    updateAccountDetails,
+    changeAvatar,
+    changeCoverImage 
 }
